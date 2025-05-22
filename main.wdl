@@ -1,6 +1,6 @@
 version 1.0
 
-task minimap2_align {
+task get_reads {
     
     input {
         String reference_path
@@ -8,7 +8,7 @@ task minimap2_align {
     }
     
     command <<<
-        apt-get update && apt-get install -y curl minimap2
+        apt-get update && apt-get install -y curl
         curl -o hs1.fa.gz ~{reference_path}
         curl -o porec.fa.gz ~{reads_path}
     >>>
@@ -20,29 +20,29 @@ task minimap2_align {
 
     runtime {
         cpu: 32
-        memory: "64G"
-        disks: "local-disk 500 SSD"
+        memory: "100G"
+        disks: "local-disk 2000 SSD"
         docker: "ubuntu:latest"
     }
     
 }
 
-workflow porec_qc {
+workflow get_fastq_reads {
 
   input {
     String reads_path = "https://s3-us-west-2.amazonaws.com/human-pangenomics/submissions/5b73fa0e-658a-4248-b2b8-cd16155bc157--UCSC_GIAB_R1041_nanopore/HG002_R1041_PoreC/Dorado_v4/HG002_1_Dorado_v4_R1041_PoreC_400bps_sup.fastq.gz"
     String reference_path = "https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.fa.gz"
   }
 
-  call minimap2_align {
+  call get_reads {
     input:
       reads_path = reads_path,
       reference_path = reference_path
   }
 
   output {
-    File reference = minimap2_align.reference
-    File reads = minimap2_align.reads
+    File reference = get_reads.reference
+    File reads = get_reads.reads
   }
 
 }
