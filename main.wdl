@@ -17,8 +17,8 @@ task get_reads {
 
     output {
         File reference = "hs1.fa.gz"
-        File r1 = "r1.fa.gz"
-        File r2 = "r2.fa.gz"
+        File r1_res = "r1.fa.gz"
+        File r2_res = "r2.fa.gz"
     }
 
     runtime {
@@ -47,8 +47,8 @@ workflow get_fastq_reads {
 
   output {
     File reference = get_reads.reference
-    File r1 = get_reads.r1
-    File r2 = get_reads.r2
+    File r1_res = get_reads.r1_res
+    File r2_res = get_reads.r2_res
   }
 
 }
