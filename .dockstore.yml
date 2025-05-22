@@ -1,0 +1,6 @@
+version: 1.2
+workflows:
+  - name: get_fastq_reads
+    subclass: WDL
+    primaryDescriptorPath: /main.wdl
+    testParameterFiles: []
