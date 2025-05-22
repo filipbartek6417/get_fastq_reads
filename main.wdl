@@ -11,8 +11,8 @@ task get_reads {
     command <<<
         apt-get update && apt-get install -y curl
         curl -o hs1.fa.gz ~{reference_path}
-        curl -o r1.fa.gz ~{reads_path}
-        curl -o r2.fa.gz ~{reads_path}
+        curl -o r1.fa.gz ~{r1}
+        curl -o r2.fa.gz ~{r2}
     >>>
 
     output {
