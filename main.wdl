@@ -4,18 +4,21 @@ task get_reads {
     
     input {
         String reference_path
-        String reads_path
+        String r1
+        String r2
     }
     
     command <<<
         apt-get update && apt-get install -y curl
         curl -o hs1.fa.gz ~{reference_path}
-        curl -o porec.fa.gz ~{reads_path}
+        curl -o r1.fa.gz ~{reads_path}
+        curl -o r2.fa.gz ~{reads_path}
     >>>
 
     output {
         File reference = "hs1.fa.gz"
-        File reads = "porec.fa.gz"
+        File r1 = "r1.fa.gz"
+        File r2 = "r2.fa.gz"
     }
 
     runtime {
@@ -30,19 +33,22 @@ task get_reads {
 workflow get_fastq_reads {
 
   input {
-    String reads_path = "https://s3-us-west-2.amazonaws.com/human-pangenomics/submissions/5b73fa0e-658a-4248-b2b8-cd16155bc157--UCSC_GIAB_R1041_nanopore/HG002_R1041_PoreC/Dorado_v4/HG002_1_Dorado_v4_R1041_PoreC_400bps_sup.fastq.gz"
+    String r1 = "https://s3-us-west-2.amazonaws.com/human-pangenomics/working/HPRC_PLUS/HG002/raw_data/hic/downsampled/HG002.HiC_1_S1_R1_001.fastq.gz"
+    String r2 = "https://s3-us-west-2.amazonaws.com/human-pangenomics/working/HPRC_PLUS/HG002/raw_data/hic/downsampled/HG002.HiC_1_S1_R2_001.fastq.gz"
     String reference_path = "https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.fa.gz"
   }
 
   call get_reads {
     input:
-      reads_path = reads_path,
-      reference_path = reference_path
+      reference_path = reference_path,
+      r1 = r1,
+      r2 = r2
   }
 
   output {
     File reference = get_reads.reference
-    File reads = get_reads.reads
+    File r1 = get_reads.r1
+    File r2 = get_reads.r2
   }
 
 }
